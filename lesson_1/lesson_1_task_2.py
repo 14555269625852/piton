@@ -1,4 +1,4 @@
-my_age="27"
-my_age="30"
+my_age = "27"
+my_age = "30"
 
-print (my_age)
+print(f"Ваш возраст через три года: {my_age}")
