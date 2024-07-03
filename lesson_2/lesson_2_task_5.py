@@ -5,8 +5,10 @@ def month_to_season(nomber):
         print("Весна")
     elif (nomber in (6, 7, 8)):
         print("Лето")
-    else:
+    elif (nomber in (9, 10, 11)):
         print("Осень")
+    else:
+        print("Введен неверный месяц")
 
 
-month_to_season(1)
+month_to_season(11)
