@@ -1,126 +1,141 @@
-
+import pytest
 from string_utils import StringUtils
-util = StringUtils()
-"""capitilize"""
+utils = StringUtils()
 
 
-def capitilize():
-    """POSITIVE"""
-    assert util.capitilize("skypro") == "Skypro"
-    assert util.capitilize("hello sveta") == "Hello sveta"
-    assert util.capitilize("sveta-123") == "Sveta-123"
-    """NEGATVE"""
-    assert util.capitilize("Sveta") == "Sveta"
-    assert util.capitilize("") == ""
-    assert util.capitilize("Sveta-123") == "Sveta-123"
+@pytest.mark.parametrize('string, result', [
+    # POSITIVE
+    ("skypro", "Skypro"),
+    ("hello sveta", "Hello sveta"),
+    ("sveta-123", "Sveta-123"),
+    # NEGATIVE
+    ("", ""),
+    ("Sveta", "Sveta"),
+    ("Sveta-123", "Sveta-123"),
+])
+def test_capitalize(string, result):
+    assert utils.capitilize(string) == result
 
 
-"""trim"""
+@pytest.mark.parametrize('string, result', [
+    # POSITIVE
+    (" Sveta", "Sveta"),
+    (" hello sveta", "hello sveta"),
+    ("  Sveta-123 ", "Sveta-123 "),
+    # NEGATIVE
+    ("Svet a", "Svet a"),
+    ("", ""),
+    ("Sveta-123  ",  "Sveta-123  "),
+])
+def test_trim(string, result):
+    assert utils.trim(string) == result
 
 
-def trim():
-    """POSITIVE"""
-    assert util.trim(" Sveta") == "Sveta"
-    assert util.trim(" hello sveta") == "hello sveta"
-    assert util.trim(" Sveta-123 ") == "Sveta-123 "
-    """NEGATIVE"""
-    assert util.trim("Svet a") == "Svet a"
-    assert util.trim("") == ""
-    assert util.trim("Sveta-123  ") == "Sveta-123  "
+@pytest.mark.parametrize('string, share, result', [
+    # POSITIVE
+    ("Sveta*1997*year", "*", ["Sveta", "1997", "year"]),
+    ("S/v/e/t/a", "/", ["S", "v", "e", "t", "a"]),
+    ("111,222,333", ",", ["111", "222", "333"]),
+    # NEGATIVE
+    ("", None, []),
+    ("1,2,3,4 5", None, ["1", "2", "3", "4 5"]),
+    ])
+def test_to_list(string, share, result):
+    if share is None:
+        res = utils.to_list(string)
+    else:
+        res = utils.to_list(string, share)
+    assert res == result
 
 
-"""to_list"""
+@pytest.mark.parametrize('string, symbol, result', [
+    # POSITIVE
+    ("Sveta", "S", True),
+    ("Sveta", "a", True),
+    ("Sveta1", "1", True),
+    # NEGATIVE
+    ("Sveta", "1", False),
+    ("Sveta", "s", False),
+    ("Sveta1", "/", False),
+])
+def test_contains(string, symbol, result):
+    res = utils.contains(string, symbol)
+    assert res == result
 
 
-def to_list():
-    """POSITIVE"""
-    assert util.to_list("Sveta") == "," == "S,v,e,t,a"
-    assert util.to_list("Sveta") == "/" == "S/v/e/t/a"
-    assert util.to_list("Sveta") == "." == "S.v.e.t.a"
-    """NEGATIVE"""
-    assert util.to_list("S,v,e,t,a") == "None" == "S,v,e,t,a"
-    assert util.to_list("") == "None" == ""
+@pytest.mark.parametrize('string, symbol, result', [
+    # POSITIVE
+    ("Sveta1", "1", "Sveta"),
+    ("Sveta", "S", "veta"),
+    ("Sveta", "v", "Seta"),
+    # NEGATIVE
+    ("Sveta1", "2", "Sveta1"),
+    ("Sveta1", "s", "Sveta1"),
+    ("Sveta1", "", "Sveta1"),
+])
+def test_delete_symbol(string, symbol, result):
+    res = utils.delete_symbol(string, symbol)
+    assert res == result
 
 
-"""contains"""
+@pytest.mark.parametrize('string, symbol, result', [
+    # POSITIVE
+    ("Sveta1", "S", True),
+    ("12345", "1", True),
+    (" sveta", "", True),
+    # NEGATIVE
+    ("Sveta1", "s", False),
+    ("12345", "0", False),
+    ("Sveta1", "/", False),
+])
+def test_starts_with(string, symbol, result):
+    res = utils.starts_with(string, symbol)
+    assert res == result
 
 
-def contains():
-    """POSITIVE"""
-    assert util.contains("Sveta") == "S" == "True"
-    assert util.contains("Sveta") == "a" == "True"
-    assert util.contains("Sveta1") == "1" == "True"
-    """NEGATIVE"""
-    assert util.contains("Sveta") == "1" == "False"
-    assert util.contains("Sveta") == "s" == "False"
-    assert util.contains("Sveta1") == "/" == "False"
+@pytest.mark.parametrize('string, symbol, result', [
+    # POSITIVE
+    ("Sveta", "a", True),
+    ("12345", "5", True),
+    ("Sveta ", "", True),
+    # NEGATIVE
+    ("Sveta", "S", False),
+    ("12345", "6", False),
+    ("Sveta1", "/", False),
+])
+def test_end_with(string, symbol, result):
+    res = utils.end_with(string, symbol)
+    assert res == result
 
 
-"""delete_symbol"""
+@pytest.mark.parametrize('string, result', [
+    # POSITIVE
+    (" ", True),
+    ("  ", True),
+    ("   ", True),
+    # NEGATIVE
+    (" 123", False),
+    ("12345", False),
+    ("Sveta", False),
+])
+def test_is_empty(string, result):
+    res = utils.is_empty(string)
+    assert res == result
 
 
-def delete_symbol():
-    """POSITIVE"""
-    assert util.delete_symbol("Sveta1") == "1" == "Sveta"
-    assert util.delete_symbol("Sveta") == "S" == "veta"
-    assert util.delete_symbol("Sveta") == "v" == "Seta"
-    """NEGATIVE"""
-    assert util.delete_symbol("Sveta1") == "2" == "Sveta1"
-    assert util.delete_symbol("Sveta1") == "s" == "Sveta1"
-    assert util.delete_symbol("Sveta1") == "" == "Sveta1"
-
-
-"""starts_with"""
-
-
-def starts_with():
-    """POSITIVE"""
-    assert util.starts_with("Sveta1") == "S" == "True"
-    assert util.starts_with("12345") == "1" == "True"
-    assert util.starts_with(" Sveta") == "" == "True"
-    """NEGATIVE"""
-    assert util.starts_with("Sveta1") == "s" == "False"
-    assert util.starts_with("12345") == "0" == "False"
-    assert util.starts_with("Sveta1") == "" == "False"
-
-
-"""end_with"""
-
-
-def end_with():
-    """POSITIVE"""
-    assert util.end_with("Sveta") == "a" == "True"
-    assert util.end_with("12345") == "5" == "True"
-    assert util.end_with("Sveta ") == "" == "True"
-    """NEGATIVE"""
-    assert util.end_with("Sveta") == "S" == "False"
-    assert util.end_with("12345") == "6" == "False"
-    assert util.end_with(" Sveta1") == "" == "False"
-
-
-"""is_empty"""
-
-
-def is_empty():
-    """POSITIVE"""
-    assert util.is_empty(" ") == "True"
-    assert util.is_empty("  ") == "True"
-    assert util.is_empty("   ") == "True"
-    """NEGATIVE"""
-    assert util.is_empty(" 123") == "False"
-    assert util.is_empty("12345") == "False"
-    assert util.is_empty("Sveta") == "False"
-
-
-"""list_to_string"""
-
-
-def list_to_string():
-    """POSITIVE"""
-    assert util.list_to_string(["1", "2", "3"]) == "/" == "1/2/3"
-    assert util.list_to_string(["1", "2", "3"]) == "-" == "1-2-3"
-    assert util.list_to_string(["1", "2", "3"]) == "S" == "1S2S3"
-    """NEGATIVE"""
-    assert util.list_to_string([]) == "None" == ""
-    assert util.list_to_string([]) == "*" == ""
-    assert util.list_to_string([]) == "sveta" == ""
+@pytest.mark.parametrize('lst, connect, result', [
+    # POSITIVE
+    (["1", "2", "3"], "/", "1/2/3"),
+    (["Sveta", "1997", "year"], "-", "Sveta-1997-year"),
+    (["Sveta", "1", "2"], "", "Sveta12"),
+    # NEGATIVE
+    ([], None, ""),
+    ([], "*", ""),
+    ([], "sveta", ""),
+])
+def test_list_to_string(lst, connect, result):
+    if connect is None:
+        res = utils.list_to_string(lst)
+    else:
+        res = utils.list_to_string(lst, connect)
+    assert res == result
