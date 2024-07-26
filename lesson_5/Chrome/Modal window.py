@@ -5,7 +5,7 @@ from time import sleep
 
 chrome = webdriver.Chrome()
 chrome.get("http://the-internet.herokuapp.com/entry_ad")
-sleep(5)
+sleep(3)
 try:
     close = chrome.find_element(
         By.CSS_SELECTOR, ("div[class='modal-footer']")).click()

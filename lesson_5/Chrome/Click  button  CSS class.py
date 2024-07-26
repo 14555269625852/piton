@@ -12,3 +12,5 @@ for x in range(1, 4):
     alert = chrome.switch_to.alert
     alert.accept()
 print(x)
+
+chrome.quit()
