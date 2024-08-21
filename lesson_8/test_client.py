@@ -54,32 +54,30 @@ def test_add_new_employee(get_token):
     assert str(new_employer_id)
 
 
-# Негативный тест на проверку без токена (добавить нового сотрудника)
-# def test_add_new_employee_withut_token(get_token):
-#     token = get_token
-#     com_id = company.get_company_list()
-#     body_employee = {
-#         "id": 0,
-#         "firstName": "Svelana",
-#         "lastName": "Ushkova",
-#         "middleName": "string",
-#         "companyId": com_id,
-#         "email": "12345@mail.ru",
-#         "url": "string",
-#         "phone": "89999999999",
-#         "birthdate": "2024-08-14T17:02:49.235Z",
-#         "isActive": 'true'
-#     }
-#     new_employer = employer.add_new(token, body_employee)
-#     assert new_employer['error'] == 'Bad Request'
+def test_add_new_employee_withut_token(get_token):
+    token = get_token
+    com_id = company.get_company_list()
+    body_employee = {
+        "id": 0,
+        "firstName": "Svelana",
+        "lastName": "Ushkova",
+        "middleName": "string",
+        "companyId": com_id,
+        "email": "12345@mail.ru",
+        "url": "string",
+        "phone": "89999999999",
+        "birthdate": "2024-08-14T17:02:49.235Z",
+        "isActive": 'true'
+    }
+    new_employer = employer.add_new(token, body_employee)
+    assert new_employer['error'] == 'Bad Request'
 
 
-#  Негативный тест без тела запроса (добавить нового сотрудника)
-# def test_add_new_employee_withut_body(get_token):
-#     token = str(get_token)
-#     body_emploee = {}
-#     new_employer = employer.add_new(token, body_emploee)
-#     assert new_employer['statusCode'] == 500
+def test_add_new_employee_withut_body(get_token):
+    token = str(get_token)
+    body_emploee = {}
+    new_employer = employer.add_new(token, body_emploee)
+    assert new_employer['statusCode'] == 500
 
 
 def test_get_by_id():
